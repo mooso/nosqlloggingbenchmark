@@ -13,7 +13,7 @@ namespace LoggingApp
 	class BlobLogger
 	{
 		private readonly CloudBlockBlob _logBlob;
-		private readonly BlockingCollection<BlockContent> _newBlocksQueue = new BlockingCollection<BlockContent>();
+		private readonly BlockingCollection<BlockContent> _newBlocksQueue = new BlockingCollection<BlockContent>(200);
 		private byte[] _currentBlockContent = new byte[MaxBlockSize];
 		private int _currentBlockContentOffset;
 		private object _currentBlockContentLock = new object();
