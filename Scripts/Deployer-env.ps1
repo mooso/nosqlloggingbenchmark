@@ -119,3 +119,62 @@ function BuildAndDeploy([Parameter(Mandatory=$true)]$projectName,
 		Deploy-Service $projectName $serviceName -upgradeInPlace:$upgradeInPlace
 	}
 }
+
+function Deploy-HDInsightForAcounts(
+	[Parameter(Mandatory=$true)]
+	[string[]]
+	$storageAccountNames,
+	[Parameter(Mandatory=$true)]
+	$location,
+	$clusterSize = 4,
+	$clusterName = "$env:USERNAME-nosqlbench")
+{
+	Trap
+	{
+		return $_
+	}
+	Write-Host "Constructing credentials..."
+	$passwordFile = "$rootDirectory\ServiceConf\HDInsightPassword.txt"
+	if (-not $(Test-Path $passwordFile))
+	{
+		Write-Error "Please create file $passwordFile with your password"
+		return
+	}
+	$password = Get-Content $passwordFile
+	$creds = New-Object System.Management.Automation.PSCredential 'nosqluser', ($password | ConvertTo-SecureString -force -asplaintext)
+    $metastoreFile = "$rootDirectory\ServiceConf\SqlMetastoreInfo.txt"
+	if (-not $(Test-Path $metastoreFile))
+	{
+		Write-Error "Please create file $metastoreFile with your SQL metastore info"
+		return
+	}
+    $metastoreInfo = Get-Content $metastoreFile
+    $metastoreCreds = New-Object System.Management.Automation.PSCredential $metastoreInfo[2], ($metastoreInfo[3] | ConvertTo-SecureString -force -asplaintext)
+	Write-Host "Getting storage account keys..."
+	$accountKeys = $storageAccountNames | %{$(Get-AzureStorageKey $_).Primary}
+	Write-Host "Constructing configuration..."
+	$clusterConf = New-AzureHDInsightClusterConfig -ClusterSizeInNodes $clusterSize |
+		Set-AzureHDInsightDefaultStorage -StorageAccountName "$($storageAccountNames[0]).blob.core.windows.net" -StorageAccountKey $accountKeys[0] -StorageContainerName $clusterName |
+        Add-AzureHDInsightMetastore -SqlAzureServerName "$($metastoreInfo[0]).database.windows.net" -DatabaseName $($metastoreInfo[1]) -Credential $metastoreCreds -MetastoreType HiveMetastore
+	for ($i = 1; $i -lt $storageAccountNames.Length; $i++)
+	{
+		$clusterConf = Add-AzureHDInsightStorage $clusterConf "$($storageAccountNames[$i]).blob.core.windows.net" $accountKeys[$i]
+	}
+	$clusterConf = Add-AzureHDInsightConfigValues $clusterConf -Core @{ 'fs.azure.io.read.tolerate.concurrent.append'='true' }
+	Write-Host "Deploying..."
+	$clust = $clusterConf | New-AzureHDInsightCluster -Credential $creds -Name $clusterName -Location $location
+	Write-Host "Deployed $clusterName. Using it."
+	Use-AzureHDInsightCluster $clusterName
+}
+
+function Deploy-HDInsightForService([Parameter(Mandatory=$true)]$serviceName)
+{
+	Trap
+	{
+		return $_
+	}
+	Write-Host "Discovering storage accounts..."
+	$location = $(Get-AzureService $serviceName).Location
+	$storageAccountNames = Discover-AccountsForLocation $location | %{$_.StorageAccountName}
+	Deploy-HDInsightForAcounts $storageAccountNames $location
+}
