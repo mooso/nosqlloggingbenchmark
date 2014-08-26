@@ -127,3 +127,7 @@ UpgradeLog*.XML
 
 # Service configuration
 ServiceConf/
+
+# Blue Coffee stuff
+Upload-ResourcesToContext.ps1
+BlueCoffeeResources/

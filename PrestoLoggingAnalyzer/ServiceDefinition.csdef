@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="PrestoLoggingAnalyzer" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-01.2.3">
+  <WorkerRole name="PrestoCoordinator" vmsize="Large">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <Endpoints>
+      <InputEndpoint name="HTTP" protocol="tcp" port="8080" localPort="8080" />
+      <InternalEndpoint name="Dummy" protocol="tcp" port="8020" />
+    </Endpoints>
+    <LocalResources>
+      <LocalStorage name="DataDirectory" cleanOnRoleRecycle="false" sizeInMB="102400" />
+      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="10240" />
+    </LocalResources>
+    <ConfigurationSettings>
+      <Setting name="BlueCoffee.Resources.Account.ConnectionString" />
+      <Setting name="BlueCoffee.Resources.Container.Name" />
+    </ConfigurationSettings>
+  </WorkerRole>
+  <WorkerRole name="PrestoWorker" vmsize="A6">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <Endpoints>
+      <InternalEndpoint name="HTTP" protocol="tcp" port="8081" />
+    </Endpoints>
+    <LocalResources>
+      <LocalStorage name="DataDirectory" cleanOnRoleRecycle="false" sizeInMB="102400" />
+      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="10240" />
+    </LocalResources>
+    <ConfigurationSettings>
+      <Setting name="BlueCoffee.Resources.Account.ConnectionString" />
+      <Setting name="BlueCoffee.Resources.Container.Name" />
+    </ConfigurationSettings>
+  </WorkerRole>
+  <WorkerRole name="HiveMetastore" vmsize="Small">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <Endpoints>
+      <InternalEndpoint name="Thrift" protocol="tcp" port="9083" />
+    </Endpoints>
+    <LocalResources>
+      <LocalStorage name="DataDirectory" cleanOnRoleRecycle="false" sizeInMB="1024" />
+      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="10240" />
+    </LocalResources>
+    <ConfigurationSettings>
+      <Setting name="BlueCoffee.Resources.Account.ConnectionString" />
+      <Setting name="BlueCoffee.Resources.Container.Name" />
+    </ConfigurationSettings>
+  </WorkerRole>
+</ServiceDefinition>
