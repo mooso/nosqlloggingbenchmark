@@ -44,9 +44,9 @@
     <Reference Include="Microsoft.Experimental.Azure.Hive">
       <HintPath>..\packages\Microsoft.Experimental.Azure.Hive.0.2.1-alpha\lib\net45\Microsoft.Experimental.Azure.Hive.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Experimental.Azure.JavaPlatform, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Experimental.Azure.JavaPlatform, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Experimental.Azure.JavaPlatform.0.2.1-alpha\lib\net45\Microsoft.Experimental.Azure.JavaPlatform.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Experimental.Azure.JavaPlatform.0.2.3-alpha\lib\net45\Microsoft.Experimental.Azure.JavaPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>

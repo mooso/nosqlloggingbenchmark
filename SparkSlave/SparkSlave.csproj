@@ -32,11 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Experimental.Azure.JavaPlatform">
-      <HintPath>..\packages\Microsoft.Experimental.Azure.JavaPlatform.0.2.1-alpha\lib\net45\Microsoft.Experimental.Azure.JavaPlatform.dll</HintPath>
+    <Reference Include="Microsoft.Experimental.Azure.JavaPlatform, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Experimental.Azure.JavaPlatform.0.2.3-alpha\lib\net45\Microsoft.Experimental.Azure.JavaPlatform.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Experimental.Azure.Spark">
-      <HintPath>..\packages\Microsoft.Experimental.Azure.Spark.0.2.1-alpha\lib\net45\Microsoft.Experimental.Azure.Spark.dll</HintPath>
+    <Reference Include="Microsoft.Experimental.Azure.Spark, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Experimental.Azure.Spark.0.2.3-alpha\lib\net45\Microsoft.Experimental.Azure.Spark.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>True</Private>
