@@ -126,7 +126,7 @@ function Deploy-HDInsightForAcounts(
 	$storageAccountNames,
 	[Parameter(Mandatory=$true)]
 	$location,
-	$clusterSize = 4,
+	$clusterSize = 8,
 	$clusterName = "$env:USERNAME-nosqlbench")
 {
 	Trap
@@ -167,7 +167,9 @@ function Deploy-HDInsightForAcounts(
 	Use-AzureHDInsightCluster $clusterName
 }
 
-function Deploy-HDInsightForService([Parameter(Mandatory=$true)]$serviceName)
+function Deploy-HDInsightForService([Parameter(Mandatory=$true)]$serviceName,
+    $clusterSize = 8,
+	$clusterName = "$env:USERNAME-nosqlbench")
 {
 	Trap
 	{
@@ -176,5 +178,5 @@ function Deploy-HDInsightForService([Parameter(Mandatory=$true)]$serviceName)
 	Write-Host "Discovering storage accounts..."
 	$location = $(Get-AzureService $serviceName).Location
 	$storageAccountNames = Discover-AccountsForLocation $location | %{$_.StorageAccountName}
-	Deploy-HDInsightForAcounts $storageAccountNames $location
+	Deploy-HDInsightForAcounts $storageAccountNames $location -clusterSize $clusterSize -clusterName $clusterName
 }
