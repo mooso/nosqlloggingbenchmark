@@ -16,5 +16,16 @@ namespace Shark
 				.Add("hive.exec.scratchdir", rootFs + "/scratch")
 				.Add("hive.metastore.warehouse.dir", rootFs + "/warehouse");
 		}
+
+		/// <summary>
+		/// Override executor memory to give all the A6's node's memory to Shark.
+		/// </summary>
+		protected override int ExecutorMemoryMb
+		{
+			get
+			{
+				return 27 * 1024;
+			}
+		}
 	}
 }
