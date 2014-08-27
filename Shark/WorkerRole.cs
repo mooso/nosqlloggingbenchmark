@@ -24,7 +24,7 @@ namespace Shark
 		{
 			get
 			{
-				return 27 * 1024;
+				return 26 * 1024;
 			}
 		}
 	}
