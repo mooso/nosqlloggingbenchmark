@@ -14,21 +14,35 @@ $solutionDirectory = $rootDirectory
 function Ensure-NugetRestored
 {
 	pushd $solutionDirectory
-	nuget restore
+	$nugetRestoreOutput = nuget restore
 	popd
+	if ($LASTEXITCODE -ne 0)
+	{
+		$nugetRestoreOutput | Write-Host
+        throw "Nuget restore failed"
+	}
 }
 
 function Build-Service($projectName, $flavor = 'Release')
 {
 	Write-Host "Building package..."
 	Ensure-NugetRestored
-	pushd "$solutionDirectory\$projectName"
-	$buildOutput = msbuild "$projectName.ccproj" /t:Publish "/p:Configuration=$flavor" /p:Platform="AnyCPU" /p:VisualStudioVersion="12.0"
+    pushd $solutionDirectory
+	$buildOutput = msbuild "NoSqlLoggingBenchmark.sln" /t:Clean "/p:Configuration=$flavor" /m /p:Platform="Any CPU" /p:VisualStudioVersion="12.0"
+	popd
 	if ($LASTEXITCODE -ne 0)
 	{
 		$buildOutput | Write-Host
+        throw "Clean solution failed"
 	}
+	pushd "$solutionDirectory\$projectName"
+	$buildOutput = msbuild "$projectName.ccproj" /t:Clean /t:Publish "/p:Configuration=$flavor" /p:Platform="AnyCPU" /p:VisualStudioVersion="12.0"
 	popd
+	if ($LASTEXITCODE -ne 0)
+	{
+		$buildOutput | Write-Host
+        throw "Build failed"
+	}
 }
 
 function Discover-AccountsForLocation($location)
