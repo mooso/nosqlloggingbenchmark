@@ -19,25 +19,36 @@ namespace LoggingApp
 		{
 			var instanceId = int.Parse(RoleEnvironment.CurrentRoleInstance.Id.Substring(RoleEnvironment.CurrentRoleInstance.Id.LastIndexOf('_') + 1));
 			var failureProbability = ((instanceId % 10) == 0) ? 0.1 : 0.01;
+			var queueLengthBeforeFinishing = ((instanceId % 7) == 0) ? 10000 : 1000;
 			var rand = new Random();
 			int numMessagesTraced = 0;
+			Queue<Guid> operationIds = new Queue<Guid>();
 			while (true)
 			{
-				var failed = rand.NextDouble() < failureProbability;
-				if (failed)
 				{
-					_logger.TraceMessage("Operation failed: I just failed at my super-important job.");
+					var newOperationId = Guid.NewGuid();
+					_logger.TraceMessage(newOperationId, "Operation started: starting my super-important job.");
+					numMessagesTraced++;
+					operationIds.Enqueue(newOperationId);
 				}
-				else
+				if (operationIds.Count >= queueLengthBeforeFinishing)
 				{
-					_logger.TraceMessage("Operation succeeded: I just aced my job as usual.");
+					var finishedId = operationIds.Dequeue();
+					var failed = rand.NextDouble() < failureProbability;
+					if (failed)
+					{
+						_logger.TraceMessage(finishedId, "Operation failed: I just failed at my super-important job.");
+					}
+					else
+					{
+						_logger.TraceMessage(finishedId, "Operation succeeded: I just aced my job as usual.");
+					}
+					numMessagesTraced++;
 				}
-				numMessagesTraced++;
-				if ((numMessagesTraced % 1000) == 0)
+				if ((numMessagesTraced % 10000) == 0)
 				{
 					Trace.TraceInformation("Traced " + numMessagesTraced + " messages so far.");
 				}
-				//Thread.Sleep(100);
 			}
 		}
 
@@ -46,7 +57,7 @@ namespace LoggingApp
 			var account = CloudStorageAccount.Parse(
 				RoleEnvironment.GetConfigurationSettingValue("Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString"));
 			var client = account.CreateCloudBlobClient();
-			var container = client.GetContainerReference("bloblogs");
+			var container = client.GetContainerReference("bloblogs2");
 			container.CreateIfNotExists();
 			var blob = container.GetBlockBlobReference("logs/" + RoleEnvironment.CurrentRoleInstance.Id);
 			_logger = new BlobLogger(blob);

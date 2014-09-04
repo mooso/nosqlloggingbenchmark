@@ -3,6 +3,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -81,10 +82,12 @@ namespace LoggingApp
 			}
 		}
 
-		public void TraceMessage(string message)
+		public void TraceMessage(Guid operationId, string message)
 		{
-			var fullMessage = String.Format("{0},{1},\"{2}\"\n", DateTime.Now,
+			var fullMessage = String.Format(CultureInfo.InvariantCulture,
+				"{0:yyyy-MM-dd HH:mm:ss.fffffff},{1},{2},\"{3}\"\n", DateTime.Now,
 				RoleEnvironment.CurrentRoleInstance.Id,
+				operationId,
 				message.Replace("\"", "\"\""));
 			var newContent = Encoding.UTF8.GetBytes(fullMessage);
 			AddNewContentToCurrentBlock(newContent);
