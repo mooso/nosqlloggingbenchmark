@@ -32,8 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Experimental.Azure.JavaPlatform">
-      <HintPath>..\packages\Microsoft.Experimental.Azure.JavaPlatform.0.2.6-alpha\lib\net45\Microsoft.Experimental.Azure.JavaPlatform.dll</HintPath>
+    <Reference Include="Microsoft.Experimental.Azure.JavaPlatform, Version=0.2.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Experimental.Azure.JavaPlatform.0.2.7-alpha\lib\net45\Microsoft.Experimental.Azure.JavaPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Experimental.Azure.Presto">
       <HintPath>..\packages\Microsoft.Experimental.Azure.Presto.0.2.1-alpha\lib\net45\Microsoft.Experimental.Azure.Presto.dll</HintPath>
