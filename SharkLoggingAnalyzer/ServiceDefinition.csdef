@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SharkLoggingAnalyzer" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-01.2.3">
-  <WorkerRole name="Shark" vmsize="Small">
+  <WorkerRole name="Shark" vmsize="Large">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
@@ -9,10 +9,16 @@
       <InternalEndpoint name="All" protocol="any" />
     </Endpoints>
     <LocalResources>
-      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="10240" />
+      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="921600" />
     </LocalResources>
     <Startup>
-      <Task commandLine="AllowAllPorts.cmd" executionContext="elevated"/>
+      <Task commandLine="AllowAllPorts.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="installdir">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='InstallDirectory']/@path"/>
+          </Variable>
+        </Environment>
+      </Task>
     </Startup>
     <ConfigurationSettings>
       <Setting name="BlueCoffee.Resources.Account.ConnectionString" />
@@ -27,10 +33,16 @@
       <InternalEndpoint name="All" protocol="any" />
     </Endpoints>
     <LocalResources>
-      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="10240" />
+      <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="921600" />
     </LocalResources>
     <Startup>
-      <Task commandLine="AllowAllPorts.cmd" executionContext="elevated"/>
+      <Task commandLine="AllowAllPorts.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="installdir">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='InstallDirectory']/@path"/>
+          </Variable>
+        </Environment>
+      </Task>
     </Startup>
     <ConfigurationSettings>
       <Setting name="BlueCoffee.Resources.Account.ConnectionString" />
@@ -50,7 +62,13 @@
       <LocalStorage name="InstallDirectory" cleanOnRoleRecycle="true" sizeInMB="10240" />
     </LocalResources>
     <Startup>
-      <Task commandLine="AllowAllPorts.cmd" executionContext="elevated"/>
+      <Task commandLine="AllowAllPorts.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="installdir">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='InstallDirectory']/@path"/>
+          </Variable>
+        </Environment>
+      </Task>
     </Startup>
     <ConfigurationSettings>
       <Setting name="BlueCoffee.Resources.Account.ConnectionString" />
