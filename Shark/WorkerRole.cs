@@ -28,19 +28,18 @@ namespace Shark
 					{ "spark.storage.blockManagerTimeoutIntervalMs", (5 * 60 * 1000).ToString() },
 					{ "spark.core.connection.connect.threads.max", "60" },
 					{ "spark.core.connection.ack.wait.timeout", (10 * 60 * 1000).ToString() },
-					{ "spark.reducer.maxMbInFlight", (20 * 1024).ToString() },
 				}.ToImmutableDictionary();
 			}
 		}
 
 		/// <summary>
-		/// Override executor memory to give all the A6's node's memory to Shark.
+		/// Override executor memory to give all the Large node's memory to Shark.
 		/// </summary>
 		protected override int ExecutorMemoryMb
 		{
 			get
 			{
-				return 26 * 1024;
+				return 6 * 1024 - 512;
 			}
 		}
 	}

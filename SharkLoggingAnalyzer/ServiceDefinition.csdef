@@ -25,7 +25,7 @@
       <Setting name="BlueCoffee.Resources.Container.Name" />
     </ConfigurationSettings>
   </WorkerRole>
-  <WorkerRole name="SparkSlave" vmsize="A6">
+  <WorkerRole name="SparkSlave" vmsize="Large">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
